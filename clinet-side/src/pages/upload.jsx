@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, X, ImageIcon, CheckCircle, AlertCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ImageUploadPage() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -8,6 +9,7 @@ export default function ImageUploadPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const navigate = useNavigate();
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -48,7 +50,7 @@ export default function ImageUploadPage() {
     formData.append('image', selectedFile);
 
     try {
-      const response = await fetch('/api/upload', {
+      const response = await fetch('http://localhost:5025/api/upload', {
         method: 'POST',
         body: formData,
       });
@@ -63,6 +65,7 @@ export default function ImageUploadPage() {
         setError(data.message || 'Failed to upload image');
         setSuccess(false);
       }
+      navigate(`/view/${data.id}`);
     } catch (err) {
       setError('Network error: Unable to upload image');
       setSuccess(false);
@@ -174,7 +177,7 @@ export default function ImageUploadPage() {
                 <button
                   onClick={handleUpload}
                   disabled={isUploading}
-                  className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-indigo-400 disabled:cursor-not-allowed font-medium"
+                  className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-indigo-400 disabled:cursor-not-allowed font-medium" 
                 >
                   {isUploading ? 'Uploading...' : 'Upload Image'}
                 </button>

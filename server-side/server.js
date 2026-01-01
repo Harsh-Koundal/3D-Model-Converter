@@ -1,7 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+
 import { connectDB } from './config/db.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 dotenv.config();
 
@@ -26,6 +28,11 @@ app.use(
         methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],    
     })
 );
+
+// routes
+
+app.use('/api/upload',uploadRoutes);
+
 
 connectDB();
 

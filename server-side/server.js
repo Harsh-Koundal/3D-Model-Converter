@@ -1,9 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import limiter from './middlewares/ratelimitMiddleware.js';
 
 import { connectDB } from './config/db.js';
-import uploadRoutes from './routes/uploadRoutes.js';
+import modelRoutes from './routes/modelRoutes.js';
+import { model } from 'mongoose';
 
 dotenv.config();
 
@@ -29,9 +31,12 @@ app.use(
     })
 );
 
+app.use(express.json());
+app.use(limiter);
+
 // routes
 
-app.use('/api/upload',uploadRoutes);
+app.use('/api/model',modelRoutes);
 
 
 connectDB();
